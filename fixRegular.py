@@ -9,7 +9,7 @@ from util import import_xml_lib, get_fnames, get_info, get_children
 ET = import_xml_lib()
 
 ifolder = 'Cleaned'
-ofolder = 'MoreFixes'
+ofolder = 'FixRegular'
 
 suspicious = {'кто':'некого', 'что':'нечего', 'куда':'некуда', 'зачем':'незачем', 'откуда':'неоткуда', 'где':'негде'}
 useless = {'вводн', 'cc', 'mark', 'огранич', 'соч-союзн', 'сент-соч', 'аналит', 'подч-союзн', 'сравнит', 'сравн-союзн', 'разъяснит', 'пасс-анал ', 'инф-союзн', 'сочин', 'присвяз', 'несобст-агент'}
@@ -162,19 +162,59 @@ def munch(ifiles, ofiles):
                     sentence.remove(elem)
 
         for sentence in root[-1].findall('S'):
-            for token in sentence.findall('W'): # Mood=Cnd fix
+            for token in sentence.findall('W'): 
+                link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(token, sentence)
                 if token.attrib['LEMMA'] in {'бы', 'б', 'чтобы', 'чтоб'}:
-                    link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(token, sentence)
+
                     try:
                         if head_token.attrib['LEMMA'] not in forbidden_head:
                             if pos in {'SCONJ', 'PART'}:
-                                token.attrib['FEAT'] = token.attrib['FEAT'] + ' Mood=Cnd'
+                                if pos != 'PART' and token.attrib['LEMMA'] != 'бы': # Mood=Cnd fix
+                                    token.attrib['FEAT'] = token.attrib['FEAT'] + ' Mood=Cnd'
                             else:
                                 token.attrib['FEAT'] = token.attrib['FEAT'].replace(' Foreign=Yes', '')
                     except:
                         print('Something went wrong')
                         print(*[(elem.text, elem.tail.rstrip('\n'), elem.attrib) for elem in sentence], sep='\n')
                         print()
+
+                if pos == 'PROPN' and len(feats) > 1 and 'Degree' in feats[1]:
+                    tfeats = feats[1].replace('Degree=Pos|', '') 
+                    token.attrib['FEAT'] = 'PROPN ' + tfeats
+
+                if link == 'advmod':
+                    if pos == 'VERB':
+
+                        if ifname == 'Cleaned/2005Mamleev_svadba.xml' and sentence.attrib['ID'] == '139':
+                            sentence.findall('W')[4].attrib['LINK'] = 'obl'
+                            sentence.findall('W')[4].attrib['DOM'] = '4'
+                            sentence.findall('W')[5].attrib['LINK'] = 'fixed'
+                            sentence.findall('W')[5].attrib['DOM'] = '5'
+                            sentence.findall('W')[6].attrib['DOM'] = '5'
+
+                        if ifname == 'Cleaned/2003Bolshie_peremeny.xml' and sentence.attrib['ID'] == '98':
+                            sentence.findall('W')[7].attrib['LINK'] = 'advcl'
+
+                    elif pos == 'PRON':
+                        if ifname == 'Cleaned/2012V_konstitutsii_ne_dolzhno_byt_mesta_dlya_vozhdya.xml' and sentence.attrib['ID'] == '76':
+                            sentence.findall('W')[10].attrib['LINK'] = 'obl'
+                            sentence.findall('W')[10].attrib['DOM'] = '12'
+                            sentence.findall('W')[11].attrib['DOM'] = '9'
+
+                        if ifname == 'Cleaned/2010Tsilindry_Faraona.xml' and sentence.attrib['ID'] == '46':
+                            sentence.findall('W')[8].attrib['LINK'] = 'obl'
+
+                        if ifname == 'Cleaned/2012Ne_mogu_bolshe_molchat.xml' and sentence.attrib['ID'] == '106':
+                            sentence.findall('W')[4].attrib['LINK'] = 'obl'
+
+                        if ifname == 'Cleaned/uppsalaBitov_1.xml' and sentence.attrib['ID'] == '116':
+                            sentence.findall('W')[8].attrib['LINK'] = 'obl'
+
+                        if ifname == 'Cleaned/2009Gadzhety-neudachniki.xml' and sentence.attrib['ID'] == '32':
+                            sentence.findall('W')[2].attrib['LINK'] = 'obl'
+
+                    elif pos == 'NOUN':
+                        token.attrib['LINK'] = 'obl'
 
         tree.write(ofname, encoding="UTF-8")
     return

@@ -88,7 +88,7 @@ def process_all(ifolder, ofolder):
     munch(ifolder, dev_list, os.path.join(ofolder, 'ru_syntagrus-ud-dev.conll'))
     munch(ifolder, test_list, os.path.join(ofolder, 'ru_syntagrus-ud-test.conll'))
     munch(ifolder, train_list, os.path.join(ofolder, 'ru_syntagrus-ud-train.conll'))
-    print('15: toCONLL.py completed')
+    print('16: toCONLL.py completed')
 
 if __name__ == "__main__":
     process_all(ifolder, ofolder)

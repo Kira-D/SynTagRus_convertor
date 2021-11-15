@@ -13,6 +13,7 @@ ET = import_xml_lib()
 PosDep = namedtuple('PosDep', ['replace_dict', 'default'])
 
 ifolder = 'Numerals'
+#ifolder = 'testexamples'
 ofolder = 'Syntax'
 logfile = 'relations_log.txt'
 
@@ -36,6 +37,82 @@ for_advmod = {'чуть-чуть', 'чуть ли не', 'чуть не', 'чт�
               'пускай', 'пусть', 'пущай'}
 
 for_aux = {'бы'}
+
+HEAD = 'DOM'
+DEPREL = 'LINK'
+POS = 'FEAT'
+
+sootnos_patches = {'2003Uidya_iz_skazki.xml_71':
+                      {'13': {HEAD: '15'},
+                       '14': {HEAD: '15', DEPREL: 'mark', POS: 'SCONJ'},
+                       '16': {DEPREL: 'mark', POS: 'SCONJ'}
+                      },
+                   '2011Lekarstva_ot_ustalosti.xml_65':
+                      {'7': {HEAD: '12', DEPREL: 'cc'},
+                       '8': {HEAD: '7', DEPREL: 'fixed'},
+                       '9': {HEAD: '7'},
+                       '13': {HEAD: '14', DEPREL: 'cc', POS: 'SCONJ'},
+                       '14': {HEAD: '12', DEPREL: 'сочин'},
+                      },
+                   '2003Tyurma_britanskoi_korony.xml_12':
+                      {'18': {HEAD: '20', DEPREL: 'cc'},
+                       '21': {HEAD: '23', DEPREL: 'cc'},
+                       '23': {HEAD: '20', DEPREL: 'сочин'},
+                      },
+                   '2006Gaidar.xml_109':
+                      {'6': {HEAD: '8'},
+                       '7': {HEAD: '8', DEPREL: 'cc', POS: 'SCONJ'},
+                       '11': {HEAD: '12', DEPREL: 'cc', POS: 'SCONJ'},
+                       '12': {HEAD: '10', DEPREL: 'сочин'}
+                      },
+                   '2014Chto_budet_posle.xml_336':
+                      {'4': {HEAD: '6'},
+                       '5': {HEAD: '6', DEPREL: 'cc', POS: 'SCONJ'},
+                       '7': {DEPREL: 'cc', POS: 'SCONJ'},
+                       '8': {HEAD: '6', DEPREL: 'сочин'}
+                      },
+                   '2014Chto_budet_posle.xml_338':
+                      {'7': {HEAD: '13', DEPREL: 'cc'},
+                       '8': {HEAD: '7', DEPREL: 'fixed'},
+                       '9': {HEAD: '7'},
+                       '18': {HEAD: '20', DEPREL: 'cc', POS: 'SCONJ'},
+                       '20': {HEAD: '13', DEPREL: 'сочин'}
+                      },
+                   '2013Sverkhnovaya_ekonomika.xml_121':
+                      {'6': {HEAD: '8', DEPREL: 'cc', POS: 'SCONJ'},
+                       '5': {HEAD: '8'},
+                       '14': {HEAD: '17', DEPREL: 'cc', POS: 'SCONJ'},
+                       '17': {HEAD: '8', DEPREL: 'сочин'}
+                      },
+                   '2012Kak_zakupat_dorogostoyashchee_oborudovanie.xml_55':
+                      {'10': {HEAD: '12', DEPREL: 'mark'},
+                       '28': {DEPREL: 'fixed'},
+                      },
+                   '2009Novaya_model_obrazovaniya.xml_9':
+                      {'19': {HEAD: '12'},
+                      },
+                   '2008Pessimist_platit_dvazhdy.xml_74':
+                      {'5': {HEAD: '6', DEPREL: 'cc', POS: 'SCONJ'},
+                       '3': {HEAD: '4'},
+                       '4': {HEAD: '6'},
+                       '9': {HEAD: '10', DEPREL: 'cc', POS: 'SCONJ'},
+                       '10': {HEAD: '6', DEPREL: 'сочин'}
+                      },
+                   '2005Stranitsy_voennoi_istorii.xml_203':
+                      {'14': {HEAD: '16', DEPREL: 'cc', POS: 'SCONJ'},
+                       '12': {HEAD: '13'},
+                       '13': {HEAD: '16'},
+                       '20': {HEAD: '22', DEPREL: 'cc', POS: 'SCONJ'},
+                       '22': {HEAD: '16', DEPREL: 'сочин'}
+                      },
+                   'uppsalaNagibin_1.xml_69':
+                      {'10': {HEAD: '13', DEPREL: 'cc'},
+                       '14': {HEAD: '17', DEPREL: 'cc', POS: 'PART'},
+                       '17': {HEAD: '13', DEPREL: 'сочин',},
+                       '18': {HEAD: '21', DEPREL: 'cc', POS: 'PART'},
+                       '21': {HEAD: '17', DEPREL: 'сочин',}
+                      }
+                  }
 
 nesobst_compl = ['1-несобст-компл', '2-несобст-компл', '3-несобст-компл', '4-несобст-компл']
 nmod_sampl = ['аддит', 'адр-присв']
@@ -257,6 +334,24 @@ raspred = {('S','S'):'nmod',
             ('A','A'):'obl',
           }
 
+sootnos = {('S','S'):'nmod',
+            ('NUM','S'):'nmod',
+            ('A','S'):'nmod',
+            ('S','A'):'nmod',
+            ('NID','NID'):'nmod',
+            ('S','NUM'):'nmod',
+            ('A','A'):'nmod',
+            ('NUM','NUM'):'nmod',
+            ('ADV','S'):'nmod',
+            ('V','S'):'nmod',
+            ('S','ADV'):'advmod',
+            ('V','ADV'):'advmod',
+            ('A','ADV'):'advmod',
+            ('S','V'):'advcl',
+            ('A','V'):'advcl',
+            ('ADV','V'):'advcl',
+          }
+
 nesobst_compl_dict = {('S','S'):'nmod',
                         ('S','NID'):'nmod',
                         ('V','S'):'obl',
@@ -270,6 +365,8 @@ nesobst_compl_dict = {('S','S'):'nmod',
                      }
 
 pos_dependent_rels = {'компл-аппоз':PosDep(compl_appos, 'nmod')}
+
+
 
 def collector(sent, filename): # file for unidentified sentences
     with open(logfile, 'a', encoding='utf-8') as file:
@@ -545,14 +642,22 @@ def main(ifname_list, ofname_list):
         for sent in root[-1].findall('S'):
             for word in sent.findall('W'):
                 link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
+
                 if link == 'сравн-союзн' and head_pos == 'CONJ':
                     if word.attrib['DOM'] == '_root' or head_token.attrib['DOM'] == '_root':
                         print('Ooopsey!')
+
                     children = get_children_attrib(sent, head_token.attrib['ID'])
                     word.attrib['DOM'] = head_token.attrib['DOM']
                     head_token.attrib['DOM'] = word.attrib['ID']
                     if head_token.attrib['LINK'] not in {'mark', 'cc'}:
                         word.attrib['LINK'] = head_token.attrib['LINK']
+                        
+                        if pos not in {'V', 'A', 'ADV'}:
+                            head_token.attrib['LINK'] = 'mark'
+                        else:
+                            head_token.attrib['LINK'] = 'case'
+
                     if word.attrib['LINK'] in conjrels:
                         continue
                     elif word.attrib['LINK'] in {"вводн", "аппоз", "разъяснит"}:
@@ -829,6 +934,7 @@ def main(ifname_list, ofname_list):
             for word in sent.findall('W'):
                 link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
                 if link == 'сравнит' and pos == 'CONJ':
+
                     children = get_children_attrib(sent, word.attrib['ID'])
                     if len(children) == 1:
                         if head_token.attrib['DOM'] == '_root':
@@ -896,8 +1002,138 @@ def main(ifname_list, ofname_list):
                         elif head_token.attrib['FEAT'].split()[0] in {'V', 'A', 'ADV'}:
                             word.attrib['LINK'] = 'advcl'
 
+        for sent in root[-1].findall('S'):
+            for word in sent.findall('W'):
+                link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
+                if link == 'соотнос':
+                    if word.attrib['DOM'] != '_root':
+                        if pos == 'CONJ':
+                            children = get_children_attrib(sent, word.attrib['ID'])
+                            head_head_id = int(head_token.attrib['DOM'])
+                            head_head_pos = sent.findall('W')[head_head_id - 1].attrib['FEAT'].split(' ')[0]
+                            head_head_dom = sent.findall('W')[head_head_id - 1].attrib['DOM']
+                            if head_pos == 'CONJ':
+
+                                word.attrib['DOM'] = head_token.attrib['DOM']
+
+                                if len(children) > 0:
+                                    for ch in children:
+                                        ch['DOM'] = head_token.attrib['DOM']
+
+                                if head_head_pos in ['V', 'A', 'ADV']:
+                                    word.attrib['LINK'] = 'mark'
+                                else:
+                                    word.attrib['LINK'] = 'cc'
+
+                                head_children = get_children_attrib(sent, head_token.attrib['ID'])
+
+                                if len(head_children) == 1:
+                                    head_children[0]['DOM'] = head_token.attrib['DOM']
+                                    head_children[0]['LINK'] = head_token.attrib['LINK']
+                                    head_token.attrib['DOM'] = head_children[0]['ID']
+                                    if head_children[0]['FEAT'].split(' ')[0] in ['V', 'A', 'ADV']:
+                                        head_token.attrib['LINK'] = 'mark'
+                                    else:
+                                        head_token.attrib['LINK'] = 'cc'
+
+                                elif len(head_children) > 1:
+                                    for ch in head_children:
+                                        if ch['LINK'] == 'соч-союзн':
+                                            ch['DOM'] = head_token.attrib['DOM']
+                                            ch['LINK'] = head_token.attrib['LINK']
+                                            head_token.attrib['DOM'] = ch['ID']
+                                            if ch['FEAT'].split(' ')[0] in ['V', 'A', 'ADV']:
+                                                head_token.attrib['LINK'] = 'mark'
+                                            else:
+                                                head_token.attrib['LINK'] = 'cc'
+
+                                            for h_ch in head_children:
+                                                if h_ch['ID'] != ch['ID']:# and h_ch['LINK'] not in {'вспом', 'огранич'}:
+                                                    h_ch['DOM'] = ch['ID']
+                                else:
+                                    pass
+                                    #print('Ooops! Too little children "соотнос": ', len(head_children))
+
+                            else:
+                                word.attrib['DOM'] = head_token.attrib['DOM']
+
+                                if head_head_pos in ['V', 'A', 'ADV']:
+                                    word.attrib['LINK'] = 'mark'
+                                else:
+                                    word.attrib['LINK'] = 'cc'
+
+                                if head_token.attrib['LINK'] in ['предик', 'nsubj']:
+                                    word.attrib['DOM'] = head_head_dom
+                                    extra_head_head_pos = sent.findall('W')[int(head_head_dom) - 1].attrib['FEAT'].split(' ')[0]
+                                    if extra_head_head_pos in ['V', 'A', 'ADV']:
+                                        word.attrib['LINK'] = 'mark'
+                                    else:
+                                        word.attrib['LINK'] = 'cc'
+
+                        else:
+                            filename_sent = ifname.split('/')[1] + '_' + sent.attrib['ID']
+                            children = get_children_attrib(sent, word.attrib['ID'])
+
+                            if filename_sent in sootnos_patches:
+
+                                for id, patch in sootnos_patches[filename_sent].items():
+                                    for attrib, value in patch.items():
+                                        sent.findall('W')[int(id) - 1].attrib[attrib] = value
+
+                            elif head_pos == 'ADV' and pos == 'ADV':
+                                if filename_sent not in sootnos_patches:
+                                    head_head_id = int(head_token.attrib['DOM'])
+                                    head_head_pos = sent.findall('W')[head_head_id - 1].attrib['FEAT'].split(' ')[0]
+                                    if word.attrib['LEMMA'] == 'столько':
+                                        word.attrib['FEAT'] = 'SCONJ'
+                                    word.attrib['DOM'] = head_token.attrib['DOM']
+
+                                    if len(children) > 0:
+                                        for ch in children:
+                                            ch['DOM'] = head_token.attrib['DOM']
+
+                                    if head_head_pos in ['V', 'A', 'ADV']:
+                                        word.attrib['LINK'] = 'mark'
+                                    else:
+                                        word.attrib['LINK'] = 'cc'
+
+                                    head_children = get_children_attrib(sent, head_token.attrib['ID'])
+
+                                    if len(head_children) > 0:
+                                        for ch in head_children:
+                                            if ch['LINK'] == 'соч-союзн':
+                                                ch['DOM'] = head_token.attrib['DOM']
+                                                ch['LINK'] = head_token.attrib['LINK']
+                                                head_token.attrib['DOM'] = ch['ID']
+                                                if head_token.attrib['LEMMA'] == 'сколько':
+                                                    head_token.attrib['FEAT'] = 'SCONJ'
+                                                if ch['FEAT'].split(' ')[0] in ['V', 'A', 'ADV']:
+                                                    head_token.attrib['LINK'] = 'mark'
+                                                else:
+                                                    head_token.attrib['LINK'] = 'cc'
+                                                for h_ch in head_children:
+                                                    if h_ch['ID'] != ch['ID']:# and h_ch['LINK'] not in {'вспом', 'огранич'}:
+                                                        h_ch['DOM'] = ch['ID']
+
+                            elif ((head_pos == 'S' and pos == 'ADV') or 
+                               (head_pos == 'V' and pos == 'ADV') or 
+                               (head_pos == 'A' and pos == 'ADV') or
+                               (head_pos == 'S' and pos == 'V')):
+                                word.attrib['DOM'] = head_token.attrib['DOM']
+                                word.attrib['LINK'] = sootnos[(head_pos, pos)]
+
+                            else:
+                                word.attrib['LINK'] = sootnos[(head_pos, pos)]
+                            
+                    else:
+                        print('Problematic "соотнос"')
+                        print(ifname, word.attrib.get('ID', ''), word.attrib.get('LINK', ''), word.attrib.get('FEAT', ''), file=sys.stderr)
+                        print(*[(token.attrib.get('ID', 'EMPTY'), token.text, token.attrib.get('DOM', 'EMPTY'), token.attrib.get('FEAT', 'EMPTY'), token.attrib.get('LINK', 'EMPTY'), token.tail) for token in sent], file=sys.stderr, sep='\n')
+                        print('***', file=sys.stderr)
+
         # сочин, соч-союзн, сент-соч
         for sent in root[-1].findall('S'):
+
             conjtrees = detect_trees(sent, conjrels)
             for conjtree in conjtrees:
                 chains = get_chains_r(conjtree)
@@ -938,29 +1174,7 @@ def main(ifname_list, ofname_list):
                                 el.attrib['LINK'] = 'conj'
                             el.attrib['DOM'] = start.attrib['ID']
 
-        # соотнос
-        for sent in root[-1].findall('S'):
-            for word in sent.findall('W'):
-                link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
-                if link == 'соотнос' and ('CONJ' in pos or 'PART' in pos) and 'CONJ' in head_pos:
-
-                    word.attrib['DOM'] = sent.findall('W')[int(head_token.attrib['DOM']) - 1].attrib['DOM']
-                    if word.attrib['LEMMA'] not in conj_set:
-                         word.attrib['LINK'] = 'mark'
-                    else:
-                         word.attrib['LINK'] = 'cc'
-
-
-                elif link == 'соотнос' and 'CONJ' in pos and 'CONJ' not in head_pos:
-                    if sent.findall('W')[int(head_token.attrib['DOM']) - 1].attrib['DOM'] != '_root':
-                        word.attrib['DOM'] = sent.findall('W')[int(head_token.attrib['DOM']) - 1].attrib['DOM']
-                    else:
-                        word.attrib['DOM'] = sent.findall('W')[int(head_token.attrib['DOM']) - 1].attrib['ID']
-                    if word.attrib['LEMMA'] not in conj_set:
-                         word.attrib['LINK'] = 'mark'
-                    else:
-                         word.attrib['LINK'] = 'cc'
-
+# ---sootnos----
         # аналит
         for sent in root[-1].findall('S'):
             for word in sent.findall('W'):
@@ -1215,7 +1429,13 @@ def main(ifname_list, ofname_list):
                         elif word.attrib['LEMMA'] in for_discourse:
                             word.attrib['LINK'] = 'discourse'
                         elif word.attrib['LEMMA'] in for_advmod:
-                            word.attrib['LINK'] = 'advmod'
+                            if word.attrib['LEMMA'] == 'лишь' and head_token.attrib['LEMMA'] == 'бы':
+                                word.attrib['LINK'] = 'mark'
+                                word.attrib['DOM'] = head_token.attrib['DOM']
+                                head_token.attrib['LINK'] = 'fixed'
+                                head_token.attrib['DOM'] = word.attrib['ID']
+                            else:
+                                word.attrib['LINK'] = 'advmod'
                             if head_token.attrib.get('LEMMA', '') == 'это' and head_token.attrib.get('LINK', '') == 'expl':
                                 word.attrib['DOM'] = head_token.attrib['DOM']
                                 #print(word.attrib.get('ID', ''), word.attrib.get('LINK', ''), word.attrib.get('FEAT', ''), file=sys.stderr)
@@ -1261,6 +1481,9 @@ def main(ifname_list, ofname_list):
                         elif head_pos == 'A' and word.attrib['LEMMA'] == 'один':
                             word.attrib['LINK'] = 'advmod'
 
+                    #print(word.attrib.get('ID', ''), word.attrib.get('LINK', ''), word.attrib.get('FEAT', ''), file=sys.stderr)
+                    #print(*[(token.attrib.get('ID', 'EMPTY'), token.text, token.attrib.get('DOM', 'EMPTY'), token.attrib.get('FEAT', 'EMPTY'), token.attrib.get('LINK', 'EMPTY'), token.tail) for token in sent], file=sys.stderr, sep='\n')
+                    #print('***', file=sys.stderr)
                     word.attrib['LINK'] = ogranic[(head_pos, pos)]
 
                 if link == 'оп-опред':
@@ -1689,9 +1912,196 @@ def main(ifname_list, ofname_list):
 
         # check if everything is converted
         for sent in root[-1].findall('S'):
+#--------fixes for exceptions and irregularities--------
+            if ifname.endswith('Numerals/2014Chto_budet_posle.xml') and sent.attrib['ID'] == '290':
+                sent.findall('W')[23].attrib['LINK'] = 'advmod'
+                sent.findall('W')[23].attrib['FEAT'] = 'PART'
+                sent.findall('W')[23].attrib['DOM'] = '31'
+                sent.findall('W')[24].attrib['DOM'] = '28'
+                sent.findall('W')[27].attrib['DOM'] = '24'
+
+            if ifname.endswith('Numerals/uppsalaBitov_2.xml') and sent.attrib['ID'] == '27':
+                sent.findall('W')[3].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2003Somnambula_v_tumane.xml') and sent.attrib['ID'] == '126':
+                sent.findall('W')[15].attrib['DOM'] = '19'
+                sent.findall('W')[17].attrib['LINK'] = 'case'
+                sent.findall('W')[17].attrib['DOM'] = '19'
+                sent.findall('W')[21].attrib['LINK'] = 'cc'
+                sent.findall('W')[21].attrib['DOM'] = '23'
+                sent.findall('W')[22].attrib['DOM'] = '3'
+
+            if ifname.endswith('Numerals/2006Stylaya_krov.xml') and sent.attrib['ID'] == '48':
+                sent.findall('W')[20].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2010Korrektsiya_mifov.xml') and sent.attrib['ID'] == '127':
+                sent.findall('W')[22].attrib['LINK'] = 'conj'
+                sent.findall('W')[16].attrib['DOM'] = '19'
+
+            if ifname.endswith('Numerals/2007Podkormlennyi_natsizm.xml') and sent.attrib['ID'] == '77':
+                sent.findall('W')[9].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2005Byt_modnym.xml') and sent.attrib['ID'] == '28':
+                sent.findall('W')[6].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2007Zheldor.xml') and sent.attrib['ID'] == '77':
+                sent.findall('W')[9].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2012Chto_delat_posle_24_dekabrya.xml') and sent.attrib['ID'] == '37':
+                sent.findall('W')[15].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2006Uroki.xml') and sent.attrib['ID'] == '37':
+                sent.findall('W')[19].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/newsYa_73.xml') and sent.attrib['ID'] == '46':
+                sent.findall('W')[41].attrib['LINK'] = 'cc'
+                sent.findall('W')[41].attrib['DOM'] = '43'
+
+            if ifname.endswith('Numerals/2011Shakhmaty.xml') and sent.attrib['ID'] == '325':
+                sent.findall('W')[3].attrib['DOM'] = '6'
+                sent.findall('W')[5].attrib['DOM'] = '3'
+                sent.findall('W')[11].attrib['LINK'] = 'discourse'
+                sent.findall('W')[11].attrib['DOM'] = '14'
+                sent.findall('W')[12].attrib['LINK'] = 'advmod'
+                sent.findall('W')[12].attrib['FEAT'] = 'PART'
+                sent.findall('W')[12].attrib['DOM'] = '14'
+                sent.findall('W')[13].attrib['LINK'] = 'parataxis'
+                sent.findall('W')[13].attrib['DOM'] = '10'
+                sent.findall('W')[14].attrib['LINK'] = 'discourse'
+                sent.findall('W')[15].attrib['LINK'] = 'parataxis'
+                sent.findall('W')[15].attrib['DOM'] = '14'
+                sent.findall('W')[19].attrib['DOM'] = '14'
+                sent.findall('W')[19].attrib['LINK'] = 'parataxis'
+                sent.findall('W')[20].attrib['DOM'] = '14'
+
+            if ifname.endswith('Numerals/2003Krupnaya_kala.xml') and sent.attrib['ID'] == '33':
+                sent.findall('W')[10].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2014Chto_budet_posle.xml') and sent.attrib['ID'] == '338':
+                sent.findall('W')[6].attrib['LINK'] = 'advmod'
+                sent.findall('W')[6].attrib['DOM'] = '8'
+                sent.findall('W')[7].attrib['LINK'] = 'advmod'
+                sent.findall('W')[7].attrib['DOM'] = '13'
+                sent.findall('W')[10].attrib['DOM'] = '8'
+
+            if ifname.endswith('Numerals/2011Lekarstva_ot_ustalosti.xml') and sent.attrib['ID'] == '65':
+                sent.findall('W')[6].attrib['LINK'] = 'advmod'
+                sent.findall('W')[6].attrib['DOM'] = '8'
+                sent.findall('W')[7].attrib['LINK'] = 'advmod'
+                sent.findall('W')[7].attrib['DOM'] = '12'
+                sent.findall('W')[10].attrib['DOM'] = '8'
+
+            if ifname.endswith('Numerals/2014Chto_budet_posle.xml') and sent.attrib['ID'] == '257':
+                sent.findall('W')[30].attrib['LINK'] = 'mark'
+                sent.findall('W')[30].attrib['DOM'] = '33'
+
+            if ifname.endswith('Numerals/newsYa_27.xml') and sent.attrib['ID'] == '3':
+                sent.findall('W')[16].attrib['DOM'] = '19'
+                sent.findall('W')[18].attrib['DOM'] = '9'
+                sent.findall('W')[24].attrib['DOM'] = '19'
+                sent.findall('W')[27].attrib['LINK'] = 'cc'
+                sent.findall('W')[27].attrib['DOM'] = '29'
+                sent.findall('W')[28].attrib['DOM'] = '9'
+                sent.findall('W')[36].attrib['DOM'] = '9'
+
+            if ifname.endswith('Numerals/2014Geroi.xml') and sent.attrib['ID'] == '210':
+                sent.findall('W')[32].attrib['LINK'] = 'conj'
+                sent.findall('W')[32].attrib['DOM'] = '21'
+                sent.findall('W')[36].attrib['LINK'] = 'conj'
+                sent.findall('W')[36].attrib['DOM'] = '33'
+
+            if ifname.endswith('Numerals/uppsalaGrekova_1.xml') and sent.attrib['ID'] == '329':
+                sent.findall('W')[5].attrib['DOM'] = '7'
+                sent.findall('W')[9].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/2011Apraushev.xml') and sent.attrib['ID'] == '85':
+                sent.findall('W')[7].attrib['DOM'] = '9'
+                sent.findall('W')[7].attrib['LINK'] = 'parataxis'
+                sent.findall('W')[8].attrib['DOM'] = '3'
+                sent.findall('W')[8].attrib['LINK'] = 'conj'
+
+            if ifname.endswith('Numerals/uppsalaKorp_716.xml') and sent.attrib['ID'] == '21':
+                sent.findall('W')[1].attrib['LINK'] = 'fixed'
+
+            if ifname.endswith('Numerals/2010Realnaya_politika.xml') and sent.attrib['ID'] == '45':
+                    sent.findall('W')[17].attrib['DOM'] = '19'
+                    sent.findall('W')[22].attrib['DOM'] = '26'
+                    sent.findall('W')[22].attrib['LINK'] = 'cc'
+                    sent.findall('W')[25].attrib['DOM'] = '16'
+
+            if ifname.endswith('Numerals/2012Otluchenie_tserkvi.xml') and sent.attrib['ID'] == '79':
+                sent.findall('W')[14].attrib['DOM'] = '17'
+                sent.findall('W')[14].attrib['LINK'] = 'cc'
+                sent.findall('W')[16].attrib['DOM'] = '3'
+                sent.findall('W')[19].attrib['DOM'] = '3'
+                sent.findall('W')[10].attrib['DOM'] = '12'
+                sent.findall('W')[7].attrib['DOM'] = '12'
+
+            if ifname.endswith('Numerals/uppsalaBitov_3.xml') and sent.attrib['ID'] == '371':
+                sent.findall('W')[3].attrib['LINK'] = 'advmod'
+
+            if ifname.endswith('Numerals/2007Prevratnosti_razvitiya.xml') and sent.attrib['ID'] == '76':
+                sent.findall('W')[22].attrib['LINK'] = 'advmod'
+
+            if ifname.endswith('Numerals/uppsalaBitov_1.xml') and sent.attrib['ID'] == '148':
+                sent.findall('W')[17].attrib['LINK'] = 'advmod'
+
+            if ifname.endswith('Numerals/2007Zheldor.xml') and sent.attrib['ID'] == '38':
+                sent.findall('W')[12].attrib['DOM'] = '18'
+                sent.findall('W')[14].attrib['DOM'] = '18'
+                sent.findall('W')[8].attrib['DOM'] = '18'
+
+                #for item in sent.findall('W'):
+                #    print(item.text, item.attrib)
+
             for word in sent.findall('W'):
                 link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
-                if link not in {'nsubj', 'nsubj:pass', 'csubj', 'csubj:pass', 'cop', 'aux', 'aux:pass', 'iobj', 'obj', 'obl', 'nmod', 'advmod', 'nummod', 'amod', 'nummod:gov', 'nummod:entity', 'nmod:agent', 'acl', 'acl:relcl', 'advcl', 'parataxis', 'discourse', 'case', 'cc', 'mark', 'ccomp', 'xcomp', 'conj', 'fixed', 'flat:name', 'flat', 'appos', 'compound', 'expl', 'dep', 'vocative', 'EMPTY'}:
+                # this is to fix the cases when there are dependents on cc-nodes
+                if link == 'cc':
+                    children = get_children_attrib(sent, word.attrib['ID'])
+                    if children != [] and any(el['LINK'] for el in children if el['LINK'] not in {'fixed'}):
+                        
+                        if len(children) == 1 and children[0]['LINK'] in ['parataxis', 'mark', 'advmod', 'nsubj']:
+                            children[0]['DOM'] = word.attrib['DOM']
+                if link == 'case':
+                    children = get_children_attrib(sent, word.attrib['ID'])    
+                    if children != [] and any(el['LINK'] for el in children if el['LINK'] not in {'fixed'}):
+
+                        if len(children) == 1 and children[0]['LINK'] in ['mark', 'parataxis']:
+                            children[0]['DOM'] = word.attrib['DOM']
+                        else:
+                            print('Potential shit: ', ifname, sent.attrib['ID'])
+                            print([(el['LINK'], el['LEMMA']) for el in children if el['LINK'] not in {'fixed'}])
+                            print(link, word.attrib['ID'])
+                            for item in sent.findall('W'):
+                                print(item.text, item.attrib)
+
+                if link == 'mark':
+                    children = get_children_attrib(sent, word.attrib['ID'])    
+                    if children != [] and any(el['LINK'] for el in children if el['LINK'] not in {'fixed'}):
+                        if len(children) == 1 and children[0]['LINK'] in ['advmod', 'parataxis', 'mark', 'nsubj']:
+                            children[0]['DOM'] = word.attrib['DOM']
+
+                if link == 'aux':
+                    children = get_children_attrib(sent, word.attrib['ID'])    
+                    if children != [] and any(el['LINK'] for el in children if el['LINK'] not in {'fixed'}):
+                        if len(children) == 1 and children[0]['LINK'] in ['advmod']:
+                            children[0]['DOM'] = word.attrib['DOM']
+
+                if link == 'cop':
+                    children = get_children_attrib(sent, word.attrib['ID'])    
+                    if children != [] and any(el['LINK'] for el in children if el['LINK'] not in {'fixed'}):
+                        if len(children) == 1 and children[0]['LINK'] in ['nsubj']:
+                            children[0]['DOM'] = word.attrib['DOM']
+
+                        #print('Potential shit: ', ifname, sent.attrib['ID'])
+                        #print([(el['LINK'], el['LEMMA']) for el in children if el['LINK'] not in {'fixed'}])
+                        #print(link, word.attrib['ID'])
+                        #for item in sent.findall('W'):
+                        #    print(item.text, item.attrib)
+                        #print('---------------') 
+#--------end--------
+                if link not in {'nsubj', 'nsubj:pass', 'csubj', 'csubj:pass', 'cop', 'aux', 'aux:pass', 'iobj', 'obj', 'obl', 'nmod', 'advmod', 'nummod', 'amod', 'nummod:gov', 'nummod:entity', 'nmod:agent', 'acl', 'acl:relcl', 'advcl', 'parataxis', 'discourse', 'case', 'cc', 'mark', 'ccomp', 'xcomp', 'conj', 'fixed', 'flat:name', 'flat', 'appos', 'compound', 'expl', 'dep', 'det', 'vocative', 'EMPTY'}:
                     print('Cannot convert this')
                     print(link, word.attrib['ID'])
                     for item in sent.findall('W'):

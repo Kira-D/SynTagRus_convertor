@@ -840,14 +840,14 @@ afghan islamic press,PROPN Animacy=Inan|Case=Nom|Gender=Neut|Number=Sing,,,,
 %,Press,PRESS,PROPN,Animacy=Inan|Case=Nom|Foreign=Yes|Gender=Neut|Number=Sing,flat
 ##,,,,,
 e = mc2,NOUN ,,,,
-%,E,E,NOUN,_,nsubj
-%,=,=,SYM,_,cop
-%,mc2,MC2,NOUN,_,%
+%,E,E,SYM,_,parataxis
+%,=,=,SYM,_,flat
+%,mc2,MC2,SYM,_,flat
 ##,,,,,
 g = 0,NOUN ,,,,
-%,g,G,NOUN,_,nsubj
-%,=,=,SYM,_,cop
-%,0,0,NUM,_,%
+%,g,G,SYM,_,parataxis
+%,=,=,SYM,_,flat
+%,0,0,SYM,_,flat
 ##,,,,,
 Lincoln continental,NOUN,,,,
 %,Lincoln,LINCOLN,PROPN,Animacy=Anim|Case=Nom|Foreign=Yes|Gender=Masc|Number=Sing,%

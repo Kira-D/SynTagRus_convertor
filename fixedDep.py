@@ -12,7 +12,7 @@ from prop_tocheck import uncertain
 from propn_lemmas_certain import certain
 ET = import_xml_lib()
 
-ifolder = 'Elided'
+ifolder = 'Ellipsis'
 ofolder = 'Fixed'
 
 csv_filename = 'mwe.csv'
@@ -215,7 +215,9 @@ def munch(ifiles, ofiles):
                     token.attrib['LINK'] = 'discourse'
                     token.attrib['ENH'] = token.attrib['ENH'].split(':')[0] + ':' + token.attrib['LINK']
                 elif token.attrib['LEMMA'] == 'один' and 'ADJ' in token.attrib['FEAT']:
-                    token.attrib['FEAT'] = ' '.join(['DET'] + token.attrib['FEAT'].split()[1:])
+                    updated_feats_list = [ el for el in token.attrib['FEAT'].split()[1].split('|') if el != 'Degree=Pos']
+                    updated_feats = '|'.join(updated_feats_list)
+                    token.attrib['FEAT'] = 'DET ' + updated_feats
 
         for sentence in root[-1].findall('S'):
             for token in sentence.findall('W'):
@@ -261,6 +263,7 @@ def munch(ifiles, ofiles):
                         word.attrib['LEMMA'] = word.attrib['LEMMA'].title()
 
                 if word.text.istitle() and pos != 'PROPN' and word.attrib['ID'] != '1':
+
                     if word.text not in uncertain:
                         word.attrib['FEAT'] = 'PROPN' + (word.attrib['FEAT'] + '\t').split('\t', maxsplit=1)[1]
                         if word.text.isupper():
@@ -275,6 +278,19 @@ def munch(ifiles, ofiles):
                             word.attrib['LEMMA'] = word.attrib['LEMMA'].title()
                     else:
                         pass # TODO: сделать ветку для неразобранных
+
+        for sent in root[-1].findall('S'):
+            for word in sent.findall('W'):
+                link, pos, feats, head_token, head_pos, head_feats, head_root = get_info(word, sent)
+                if ifname.endswith('2009Vyzov_i_otvet.xml') and sent.attrib['ID'] == '30':
+                    sent.findall('W')[29].attrib['LINK'] = 'nmod'
+                if 'nummod' in link and pos == 'PROPN':
+                    word.attrib['FEAT'] = 'NUM'
+                    #print('Potential shit: ', ifname, sent.attrib['ID'])
+                    #print(link, word.attrib['ID'])
+                    #for item in sent.findall('W'):
+                    #    print(item.text, item.attrib)
+                    #print('---------------') 
 
         tree.write(ofname, encoding="utf-8")
     return

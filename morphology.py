@@ -4,6 +4,7 @@
 
 import os
 import re
+import sys
 from collections import namedtuple
 from collections import defaultdict
 import json
@@ -239,6 +240,7 @@ def munch(ifiles, ofiles):
                 if 'NODETYPE' not in token.attrib and 'FEAT' in token.attrib:
                     lemma = token.attrib.get('LEMMA', '').lower()
                     pos = token.attrib.get('FEAT', ' ').split(' ')[0]
+                    deprel = token.attrib.get('LINK', '')
 
                     if (word in {'его', 'ее', 'их'} and
                         token.attrib['DOM'] != '_root' and
@@ -250,13 +252,17 @@ def munch(ifiles, ofiles):
                         pos = 'DET'
 
                     if lemma == 'сколько':
-                        pos = 'NUM'
-
-                    if word in compr_dict and lemma in ['много', 'мало']:
-                        pos = 'NUM'
+                        if deprel in ['mark', 'cc']:
+                            pos = 'SCONJ'
 
                     # fix token
                     fix_token(ifname, int(sentence.attrib['ID']), j + 1, token, lemma, pos, prev_punct, logfile)
+
+                if token.attrib.get('LINK', '') == 'nummod':
+                    if token.attrib['FEAT'].split(' ')[0] == 'ADV':
+                        token.attrib['FEAT'] = 'NUM'
+                    elif token.attrib['FEAT'].split(' ')[0] == 'ADJ':
+                        token.attrib['LINK'] = 'amod'
 
                 prev_punct = whitespace_re.sub('', safe_text(token.tail))
 
